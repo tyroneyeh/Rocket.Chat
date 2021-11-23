@@ -128,7 +128,7 @@ export function getDataToSyncUserData(ldapUser, user) {
 						_.map(ldapUser[ldapField], function(item) {
 							// emailList.push({ address: item, verified });
 							// For fix multi mail records is HEX format issue.
-							emailList.push({ address: Buffer.from(item, "hex").toString("ascii"), verified });
+							emailList.push({ address: Buffer.from(item, 'hex').toString('ascii'), verified });
 						});
 					} else {
 						emailList.push({ address: ldapUser[ldapField], verified });
