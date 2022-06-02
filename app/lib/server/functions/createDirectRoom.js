@@ -90,12 +90,12 @@ export const createDirectRoom = function(members, roomExtraData = {}, options = 
 	} else {
 		const me = Meteor.user();
 		members.forEach((member) => {
-			const otherMembers = sortedMembers.filter(({ _id }) => _id !== member._id);
+			const otherMembers = sortedMembers.filter(({ _id }) => _id !== member._id), fname = getFname(otherMembers);
 
 			Subscriptions.upsert({ rid, 'u._id': member._id }, {
 				...options.creator === member._id && { $set: { open: true } },
 				$setOnInsert: generateSubscription(
-					(me.username === getFname(otherMembers) ? me.name : getFname(otherMembers)),
+					(me.username === fname ? me.name : fname),
 					getName(otherMembers),
 					member,
 					{
