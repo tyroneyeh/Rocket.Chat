@@ -129,6 +129,12 @@ const parseNotEscaped = (message, {
 		return addAsToken(message, `<a data-title="${ url }" href="${ url }" title="${ title }" target="${ target }" rel="noopener noreferrer"><div class="inline-image" style="background-image: url(${ url });"></div></a>`, 'link');
 	});
 
+	// #4 for bracket symbol issue
+	let realtitle;
+	if (msg.indexOf("[") == 0 && msg.lastIndexOf("]") != -1  && msg.match(/\[/g).length > 1 && (realtitle = msg.slice(msg.indexOf("[") + 1, msg.lastIndexOf("]")))) {
+		msg = msg.replace(realtitle, realtitle.replace(/\[/g, "｢").replace(/\]/g, "｣"));
+	}
+
 	// Support [Text](http://link)
 	msg = msg.replace(new RegExp(`\\[([^\\]]+)\\]\\(((?:${ schemes }):\\/\\/[^\\s]+)\\)`, 'gm'), (match, title, url) => {
 		if (!validateUrl(url, message)) {
@@ -138,7 +144,7 @@ const parseNotEscaped = (message, {
 			return match;
 		}
 		const target = url.indexOf(rootUrl) === 0 ? '' : '_blank';
-		title = title.replace(/&amp;/g, '&');
+		title = title.replace(/&amp;/g, '&').replace(/｢/g, "&#91;").replace(/｣/g, "&#93;");
 
 		const escapedUrl = encodeURI(url);
 
