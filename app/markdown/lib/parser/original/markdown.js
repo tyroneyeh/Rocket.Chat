@@ -131,7 +131,7 @@ const parseNotEscaped = (message, {
 
 	// #4 for bracket symbol issue
 	let realtitle;
-	if (msg.indexOf("[") == 0 && msg.lastIndexOf("]") != -1  && msg.match(/\[/g).length > 1 && (realtitle = msg.slice(msg.indexOf("[") + 1, msg.lastIndexOf("]")))) {
+	if (msg.indexOf("[") != -1 && msg.lastIndexOf("]") != -1 && msg.match(/\[/g).length > 1 && (realtitle = msg.slice(msg.indexOf("[") + 1, msg.indexOf("(") - 1))) {
 		msg = msg.replace(realtitle, realtitle.replace(/\[/g, "｢").replace(/\]/g, "｣"));
 	}
 
