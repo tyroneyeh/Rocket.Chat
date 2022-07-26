@@ -88,13 +88,14 @@ export const createDirectRoom = function(members, roomExtraData = {}, options = 
 			$setOnInsert: generateSubscription(members[0].name || members[0].username, members[0].username, members[0], { ...options.subscriptionExtra }),
 		});
 	} else {
+		const me = Meteor.user();
 		members.forEach((member) => {
-			const otherMembers = sortedMembers.filter(({ _id }) => _id !== member._id);
+			const otherMembers = sortedMembers.filter(({ _id }) => _id !== member._id), fname = getFname(otherMembers);
 
 			Subscriptions.upsert({ rid, 'u._id': member._id }, {
 				...options.creator === member._id && { $set: { open: true } },
 				$setOnInsert: generateSubscription(
-					getFname(otherMembers),
+					(me.username === fname ? me.name : fname),
 					getName(otherMembers),
 					member,
 					{
